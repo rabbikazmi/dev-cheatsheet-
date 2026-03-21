@@ -23,12 +23,15 @@
         </header>
 
         <div class="search-section">
-            <input 
-                type="text" 
-                id="searchInput" 
-                class="search-bar" 
-                placeholder="Search by title or description..."
-            >
+            <div class="search-wrapper">
+                <input
+                    type="text"
+                    id="searchInput"
+                    class="search-bar"
+                    placeholder="Search by title or description..."
+                >
+                <button id="clearSearch" class="search-clear" aria-label="Clear search">&times;</button>
+            </div>
         </div>
 
         <div class="filter-section">

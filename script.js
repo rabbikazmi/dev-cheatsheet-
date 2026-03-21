@@ -2,6 +2,7 @@
 var cardsContainer = document.getElementById('cardsContainer');
 var noResults = document.getElementById('noResults');
 var searchInput = document.getElementById('searchInput');
+var clearSearch = document.getElementById('clearSearch');
 var filterButtons = document.querySelectorAll('.filter-btn');
 
 // track the current active filter and search term
@@ -14,7 +15,14 @@ function initializeApp() {
     renderCards(cheatsheetData);
     
     // add event listener for search input
-    searchInput.addEventListener('keyup', handleSearch);
+    searchInput.addEventListener('input', handleSearch);
+    clearSearch.addEventListener('click', function() {
+        searchInput.value = '';
+        clearSearch.classList.remove('visible');
+        currentSearchTerm = '';
+        filterAndRenderCards();
+        searchInput.focus();
+    });
     
     // add event listeners for filter buttons
     filterButtons.forEach(function(button) {
@@ -25,6 +33,7 @@ function initializeApp() {
 // handle search input - filters cards by title or description
 function handleSearch(event) {
     currentSearchTerm = event.target.value.toLowerCase();
+    clearSearch.classList.toggle('visible', currentSearchTerm.length > 0);
     filterAndRenderCards();
 }
 
