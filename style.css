@@ -129,6 +129,37 @@ body {
     border-color: var(--accent-color);
 }
 
+.search-wrapper {
+    position: relative;
+}
+
+.search-wrapper .search-bar {
+    padding-right: 36px;
+}
+
+.search-clear {
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1;
+    color: var(--text-muted, #888);
+    padding: 0 4px;
+}
+
+.search-clear:hover {
+    color: var(--text-main);
+}
+
+.search-clear.visible {
+    display: block;
+}
+
 /* 5. Filter Section */
 .filter-section {
     display: flex;
