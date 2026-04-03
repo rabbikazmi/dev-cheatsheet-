@@ -21,14 +21,17 @@
             </div>
             <p>Quick reference for common commands and snippets</p>
         </header>
-
+        
         <div class="search-section">
-            <input 
-                type="text" 
-                id="searchInput" 
-                class="search-bar" 
-                placeholder="Search by title or description..."
-            >
+            <div class="search-wrapper">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-bar" 
+                    placeholder="Search by title or description..."
+                >
+                <span id="clearBtn">&times;</span>
+            </div>
         </div>
 
         <div class="filter-section">
@@ -40,7 +43,7 @@
         </div>
 
         <div id="cardsContainer" class="cards-container">
-            </div>
+        </div>
 
         <div id="noResults" class="no-results">
             <p>No cheatsheets found. Try adjusting your search or filters.</p>
