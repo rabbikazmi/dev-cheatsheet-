@@ -354,8 +354,22 @@ body {
 }
 
 .result-count {
-    margin-top: 6px;
-    font-size: 13px;
+    margin-top: 10px;
+    font-size: 0.9rem;
     color: var(--text-muted);
     padding-left: 4px;
+}
+
+.fav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 4px;
+    transition: transform 0.2s ease;
+}
+
+.fav-btn:hover {
+    transform: scale(1.2);
 }

@@ -40,38 +40,31 @@
                 <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
               </svg>
 
-              <svg
-                class="moon-icon"
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path
-                  d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
-                ></path>
-              </svg>
-            </button>
-          </div>
+        <div class="search-section">
+            <div class="search-wrapper">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-bar" 
+                    placeholder="Search by title or description..."
+                >
+                <span class="clear-btn" id="clearBtn">×</span>
+            </div>
+                <div class="result-count" id="resultCount"></div>
         </div>
         <p>Quick reference for common commands and snippets</p>
         <span class="snippet-badge" id="snippetBadge"></span>
       </header>
 
-      <div class="search-section">
-        <div class="search-wrapper">
-          <input
-            type="text"
-            id="searchInput"
-            class="search-bar"
-            placeholder="Search by title or description..."
-          />
-          <span class="clear-btn" id="clearBtn">×</span>
+        <div class="filter-section">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="favorites">⭐ Favorites</button>
+            <button class="filter-btn" data-filter="git">Git</button>
+            <button class="filter-btn" data-filter="terminal">Terminal</button>
+            <button class="filter-btn" data-filter="javascript">JavaScript</button>
+            <button class="filter-btn" data-filter="css">CSS</button>
+            <button class="filter-btn" data-filter="react">React</button>
+            <button class="filter-btn" data-filter="sql">SQL</button>
         </div>
         <div id="resultCount" class="result-count"></div>
       </div>
