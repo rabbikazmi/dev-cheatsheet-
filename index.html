@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dev Cheatsheet Site</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="favicon.png">
   </head>
   <body>
     <div class="container">
@@ -103,6 +104,10 @@
         <button class="filter-btn" data-filter="sql">
            <span class="dot dot-sql"></span>SQL
            <span class="count" id="count-sql"></span></button>
+        <button class="filter-btn filter-btn--favorites" data-filter="favorites">
+          <span class="heart-icon">♡</span>Favorites
+          <span class="count" id="count-favorites"></span>
+        </button>
       </div>
 
       <div id="cardsContainer" class="cards-container"></div>
@@ -111,6 +116,27 @@
         <p>No cheatsheets found. Try adjusting your search or filters.</p>
       </div>
     </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 DevSheet • Built with 💙</p>
+  </div>
+</footer>
+
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="m18 15-6-6-6 6" />
+      </svg>
+    </button>
 
     <script src="data.js"></script>
     <script src="script.js"></script>

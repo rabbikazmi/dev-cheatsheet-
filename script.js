@@ -4,6 +4,36 @@ var noResults = document.getElementById('noResults');
 var searchInput = document.getElementById('searchInput');
 var filterButtons = document.querySelectorAll('.filter-btn');
 var clearBtn = document.getElementById('clearBtn');
+var backToTopBtn = document.getElementById('backToTop');
+
+// --- Favorites Logic ---
+function getFavorites() {
+    try {
+        return JSON.parse(localStorage.getItem('cheatsheet-favorites') || '[]');
+    } catch (e) {
+        return [];
+    }
+}
+
+function saveFavorites(favs) {
+    localStorage.setItem('cheatsheet-favorites', JSON.stringify(favs));
+}
+
+function isFavorite(title) {
+    return getFavorites().includes(title);
+}
+
+function toggleFavorite(title) {
+    var favs = getFavorites();
+    var idx = favs.indexOf(title);
+    if (idx === -1) {
+        favs.push(title);
+    } else {
+        favs.splice(idx, 1);
+    }
+    saveFavorites(favs);
+    return idx === -1; // true if just added
+}
 
 // set snippet count badge
 var snippetBadge = document.getElementById('snippetBadge');
@@ -31,6 +61,11 @@ function updateCounts() {
             }
         }
     });
+    // update favorites count
+    var favCountEl = document.getElementById('count-favorites');
+    if (favCountEl) {
+        favCountEl.textContent = getFavorites().length;
+    }
 }
 
 // initialize the app when page loads
@@ -65,6 +100,32 @@ function initializeApp() {
     filterButtons.forEach(function(button) {
         button.addEventListener('click', handleFilter);
     });
+
+    // Back to Top functionality
+    if (backToTopBtn) {
+        var isVisible = false;
+
+        window.addEventListener('scroll', function() {
+            var shouldBeVisible = window.pageYOffset > 300;
+            
+            // Only update DOM if state changed
+            if (shouldBeVisible !== isVisible) {
+                isVisible = shouldBeVisible;
+                if (isVisible) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+            }
+        });
+
+        backToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
 }
 
 // handle search input - filters cards by title or description
@@ -92,9 +153,17 @@ function handleFilter(event) {
 
 // filter cards based on current filter and search term
 function filterAndRenderCards() {
+    var favs = getFavorites();
     var filtered = cheatsheetData.filter(function(cheatsheet) {
-        // check if category matches (or if filter is 'all')
-        var categoryMatch = currentFilter === 'all' || cheatsheet.category === currentFilter;
+        // check if category matches (or if filter is 'all' or 'favorites')
+        var categoryMatch;
+        if (currentFilter === 'all') {
+            categoryMatch = true;
+        } else if (currentFilter === 'favorites') {
+            categoryMatch = favs.includes(cheatsheet.title);
+        } else {
+            categoryMatch = cheatsheet.category === currentFilter;
+        }
         
         // check if search term matches title or description
        var searchMatch = cheatsheet.title.toLowerCase().includes(currentSearchTerm) ||
@@ -137,11 +206,18 @@ function createCardElement(cheatsheet) {
     var card = document.createElement('div');
     card.className = 'card';
     
+    var favorited = isFavorite(cheatsheet.title);
+    
     // build the html for the card
     card.innerHTML = 
         '<div class="card-header">' +
             '<h3 class="card-title">' + cheatsheet.title + '</h3>' +
-            '<span class="card-category"><span class="dot dot-' + cheatsheet.category + '"></span>' + cheatsheet.category + '</span>' +
+            '<div class="card-header-right">' +
+                '<button class="favorite-btn' + (favorited ? ' favorited' : '') + '" aria-label="Toggle favorite" title="Save to favorites">' +
+                    (favorited ? '♥' : '♡') +
+                '</button>' +
+                '<span class="card-category"><span class="dot dot-' + cheatsheet.category + '"></span>' + cheatsheet.category + '</span>' +
+            '</div>' +
         '</div>' +
         '<p class="card-description">' + cheatsheet.description + '</p>' +
         '<pre class="card-code">' + escapeHtml(cheatsheet.code) + '</pre>' +
@@ -150,6 +226,19 @@ function createCardElement(cheatsheet) {
     // add click event listener to the copy button
     var copyButton = card.querySelector('.copy-btn');
     copyButton.addEventListener('click', handleCopyClick);
+
+    // add click event listener to the favorite button
+    var favButton = card.querySelector('.favorite-btn');
+    favButton.addEventListener('click', function() {
+        var added = toggleFavorite(cheatsheet.title);
+        favButton.textContent = added ? '♥' : '♡';
+        favButton.classList.toggle('favorited', added);
+        updateCounts();
+        // if currently viewing favorites and unfavorited, re-render
+        if (currentFilter === 'favorites' && !added) {
+            filterAndRenderCards();
+        }
+    });
     
     return card;
 }
