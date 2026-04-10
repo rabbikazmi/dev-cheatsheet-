@@ -6,35 +6,6 @@ var filterButtons = document.querySelectorAll('.filter-btn');
 var clearBtn = document.getElementById('clearBtn');
 var backToTopBtn = document.getElementById('backToTop');
 
-// --- Favorites Logic ---
-function getFavorites() {
-    try {
-        return JSON.parse(localStorage.getItem('cheatsheet-favorites') || '[]');
-    } catch (e) {
-        return [];
-    }
-}
-
-function saveFavorites(favs) {
-    localStorage.setItem('cheatsheet-favorites', JSON.stringify(favs));
-}
-
-function isFavorite(title) {
-    return getFavorites().includes(title);
-}
-
-function toggleFavorite(title) {
-    var favs = getFavorites();
-    var idx = favs.indexOf(title);
-    if (idx === -1) {
-        favs.push(title);
-    } else {
-        favs.splice(idx, 1);
-    }
-    saveFavorites(favs);
-    return idx === -1; // true if just added
-}
-
 // set snippet count badge
 var snippetBadge = document.getElementById('snippetBadge');
 if (snippetBadge) {
