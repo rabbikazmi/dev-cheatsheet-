@@ -215,6 +215,7 @@ body {
 .dot-css { background-color: #a855f7; }
 .dot-react { background-color: #06b6d4; }
 .dot-sql { background-color: #f97316; }
+.fav-icon { font-size: 1.1rem; line-height: 1; }
 
 /* Favorites filter button */
 .filter-btn--favorites .heart-icon {
@@ -305,14 +306,53 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 12px;
+    gap: 15px;
 }
 
 .card-title {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     font-weight: 600;
     color: var(--text-main);
     margin: 0;
     flex-grow: 1;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.fav-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.4rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.fav-btn:hover {
+    color: #ef4444;
+    transform: scale(1.1);
+}
+
+.fav-btn.active {
+    color: #ef4444;
+}
+
+.heart-icon {
+    transition: all 0.2s ease;
+    display: block;
+}
+
+.fav-btn.active .heart-icon {
+    transform: scale(1.1);
+    animation: heartPop 0.3s ease-out;
 }
 
 .card-category {
@@ -325,7 +365,6 @@ body {
     border-radius: 4px;
     font-size: 0.8rem;
     font-weight: 500;
-    margin-left: 10px;
     white-space: nowrap;
 }
 
@@ -409,11 +448,41 @@ body {
     .search-bar { padding: 10px 12px; }
 }
 
-.result-count {
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 6px;
+    padding: 0 4px;
+}
+
+.result-count {
     font-size: 13px;
     color: var(--text-muted);
-    padding-left: 4px;
+}
+
+.clear-all-link {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #dc3545;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.clear-all-link:hover {
+    opacity: 0.7;
+}
+
+/* Favorites Minimal Header */
+.favorites-header {
+    text-align: right;
+    margin-bottom: 8px;
+    padding: 4px 0;
 }
 
 /* 12. Back to Top Button */

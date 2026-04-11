@@ -74,43 +74,47 @@
           />
           <span class="clear-btn" id="clearBtn">×</span>
         </div>
-        <div id="resultCount" class="result-count"></div>
+
       </div>
 
-      <div class="filter-section">
-        <button class="filter-btn active" data-filter="all">
-          All <span class="count" id="count-all"></span>
-        </button>
-        <button class="filter-btn" data-filter="git">
-          <span class="dot dot-git"></span>Git
-          <span class="count" id="count-git"></span>
-        </button>
-        <button class="filter-btn" data-filter="terminal">
-          <span class="dot dot-terminal"></span>Terminal
-          <span class="count" id="count-terminal"></span>
-        </button>
-        <button class="filter-btn" data-filter="javascript">
-          <span class="dot dot-javascript"></span>JavaScript
-          <span class="count" id="count-javascript"></span>
-        </button>
-        <button class="filter-btn" data-filter="css">
-          <span class="dot dot-css"></span>CSS
-          <span class="count" id="count-css"></span>
-        </button>
-        <button class="filter-btn" data-filter="react">
-          <span class="dot dot-react"></span>React
-          <span class="count" id="count-react"></span>
-        </button>
-        <button class="filter-btn" data-filter="sql">
-           <span class="dot dot-sql"></span>SQL
-           <span class="count" id="count-sql"></span></button>
-        <button class="filter-btn filter-btn--favorites" data-filter="favorites">
-          <span class="heart-icon">♡</span>Favorites
-          <span class="count" id="count-favorites"></span>
-        </button>
-      </div>
-
-      <div id="cardsContainer" class="cards-container"></div>
+       <div class="filter-section">
+         <button class="filter-btn active" data-filter="all">
+           All <span class="count" id="count-all"></span>
+         </button>
+         <button class="filter-btn" data-filter="git">
+           <span class="dot dot-git"></span>Git
+           <span class="count" id="count-git"></span>
+         </button>
+         <button class="filter-btn" data-filter="terminal">
+           <span class="dot dot-terminal"></span>Terminal
+           <span class="count" id="count-terminal"></span>
+         </button>
+         <button class="filter-btn" data-filter="javascript">
+           <span class="dot dot-javascript"></span>JavaScript
+           <span class="count" id="count-javascript"></span>
+         </button>
+         <button class="filter-btn" data-filter="css">
+           <span class="dot dot-css"></span>CSS
+           <span class="count" id="count-css"></span>
+         </button>
+         <button class="filter-btn" data-filter="react">
+           <span class="dot dot-react"></span>React
+           <span class="count" id="count-react"></span>
+         </button>
+         <button class="filter-btn" data-filter="sql">
+            <span class="dot dot-sql"></span>SQL
+            <span class="count" id="count-sql"></span></button>
+         <button class="filter-btn" data-filter="favorites">
+           <span class="fav-icon">❤️</span>Favorites
+           <span class="count" id="count-favorites">0</span>
+         </button>
+       </div>
+ 
+       <div id="favoritesHeader" class="favorites-header" style="display: none;">
+         <button id="clearAllFavorites" class="clear-all-link">Clear All</button>
+       </div>
+ 
+       <div id="cardsContainer" class="cards-container"></div>
 
       <div id="noResults" class="no-results">
         <p>No cheatsheets found. Try adjusting your search or filters.</p>

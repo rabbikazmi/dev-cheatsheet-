@@ -16,14 +16,66 @@ if (snippetBadge) {
 var currentFilter = 'all';
 var currentSearchTerm = '';
 
+// Favorites Manager
+var FavoritesManager = {
+    key: 'dev_cheatsheet_favorites',
+    favorites: JSON.parse(localStorage.getItem('dev_cheatsheet_favorites') || '[]'),
+    
+    toggle: function(title) {
+        var index = this.favorites.indexOf(title);
+        if (index === -1) {
+            this.favorites.push(title);
+        } else {
+            this.favorites.splice(index, 1);
+        }
+        this.save();
+        return this.isFavorite(title);
+    },
+    
+    isFavorite: function(title) {
+        return this.favorites.indexOf(title) !== -1;
+    },
+    
+    save: function() {
+        localStorage.setItem(this.key, JSON.stringify(this.favorites));
+    },
+    
+    getCount: function() {
+        return this.favorites.length;
+    },
+    
+    clearAll: function() {
+        this.favorites = [];
+        this.save();
+    }
+};
+
+// toggle visibility of favorites header and clear all button
+function updateClearAllVisibility() {
+    var favoritesHeader = document.getElementById('favoritesHeader');
+    var clearAllBtn = document.getElementById('clearAllFavorites');
+    var countInNav = FavoritesManager.getCount();
+    
+    if (favoritesHeader) {
+        // Only show the header if the favorites filter is active AND we have saved items
+        if (currentFilter === 'favorites' && countInNav > 0) {
+            favoritesHeader.style.display = 'block'; // Changed to block for text-align: right
+        } else {
+            favoritesHeader.style.display = 'none';
+        }
+    }
+}
+
 // update count for each category button
 function updateCounts() {
-    var categories = ['all', 'git', 'terminal', 'javascript', 'css', 'react', 'sql'];
+    var categories = ['all', 'git', 'terminal', 'javascript', 'css', 'react', 'sql', 'favorites'];
     categories.forEach(function(category) {
         var countEl = document.getElementById('count-' + category);
         if (countEl) {
             if (category === 'all') {
                 countEl.textContent = cheatsheetData.length;
+            } else if (category === 'favorites') {
+                countEl.textContent = FavoritesManager.getCount();
             } else {
                 var count = cheatsheetData.filter(function(item) {
                     return item.category === category;
@@ -72,6 +124,40 @@ function initializeApp() {
         button.addEventListener('click', handleFilter);
     });
 
+    // event delegation for favorite buttons
+    cardsContainer.addEventListener('click', function(event) {
+        var favBtn = event.target.closest('.fav-btn');
+        if (favBtn) {
+            var title = favBtn.getAttribute('data-title');
+            var isNowFavorite = FavoritesManager.toggle(title);
+            
+            if (isNowFavorite) {
+                favBtn.classList.add('active');
+                favBtn.querySelector('svg').setAttribute('fill', 'currentColor');
+            } else {
+                favBtn.classList.remove('active');
+                favBtn.querySelector('svg').setAttribute('fill', 'none');
+                // if we're currently in the favorites filter, we might want to re-render
+                if (currentFilter === 'favorites') {
+                    filterAndRenderCards();
+                }
+            }
+            updateCounts();
+        }
+    });
+
+    // Clear All Favorites listener
+    var clearAllBtn = document.getElementById('clearAllFavorites');
+    if (clearAllBtn) {
+        clearAllBtn.addEventListener('click', function() {
+            if (window.confirm('Remove all saved favorites?')) {
+                FavoritesManager.clearAll();
+                updateCounts();
+                filterAndRenderCards();
+            }
+        });
+    }
+
     // Back to Top functionality
     if (backToTopBtn) {
         var isVisible = false;
@@ -118,6 +204,9 @@ function handleFilter(event) {
     // update current filter
     currentFilter = event.target.getAttribute('data-filter');
     
+    // update clear all visibility
+    updateClearAllVisibility();
+    
     // re-filter and render cards
     filterAndRenderCards();
 }
@@ -127,11 +216,7 @@ function filterAndRenderCards() {
     var favs = getFavorites();
     var filtered = cheatsheetData.filter(function(cheatsheet) {
         // check if category matches (or if filter is 'all' or 'favorites')
-        var categoryMatch;
-        if (currentFilter === 'all') {
-            categoryMatch = true;
-        } else if (currentFilter === 'favorites') {
-            categoryMatch = favs.includes(cheatsheet.title);
+
         } else {
             categoryMatch = cheatsheet.category === currentFilter;
         }
@@ -147,6 +232,9 @@ function filterAndRenderCards() {
     
     // render the filtered cards
     renderCards(filtered);
+    
+    // update visibility of clear all button
+    updateClearAllVisibility();
 }
 
 // render cards to the dom
@@ -157,6 +245,11 @@ function renderCards(cardsToRender) {
     
     // check if there are any cards to display
     if (cardsToRender.length === 0) {
+        if (currentFilter === 'favorites' && currentSearchTerm === '') {
+            noResults.querySelector('p').textContent = "No favorites saved yet. Click the ♡ on any card to add one!";
+        } else {
+            noResults.querySelector('p').textContent = "No cheatsheets found. Try adjusting your search or filters.";
+        }
         noResults.style.display = 'block';
         return;
     }
@@ -177,16 +270,13 @@ function createCardElement(cheatsheet) {
     var card = document.createElement('div');
     card.className = 'card';
     
-    var favorited = isFavorite(cheatsheet.title);
+
     
     // build the html for the card
     card.innerHTML = 
         '<div class="card-header">' +
             '<h3 class="card-title">' + cheatsheet.title + '</h3>' +
-            '<div class="card-header-right">' +
-                '<button class="favorite-btn' + (favorited ? ' favorited' : '') + '" aria-label="Toggle favorite" title="Save to favorites">' +
-                    (favorited ? '♥' : '♡') +
-                '</button>' +
+
                 '<span class="card-category"><span class="dot dot-' + cheatsheet.category + '"></span>' + cheatsheet.category + '</span>' +
             '</div>' +
         '</div>' +
