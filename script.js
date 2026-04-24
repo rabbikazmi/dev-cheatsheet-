@@ -84,6 +84,11 @@ function updateCounts() {
             }
         }
     });
+    // update favorites count
+    var favCountEl = document.getElementById('count-favorites');
+    if (favCountEl) {
+        favCountEl.textContent = getFavorites().length;
+    }
 }
 
 // initialize the app when page loads
@@ -208,13 +213,10 @@ function handleFilter(event) {
 
 // filter cards based on current filter and search term
 function filterAndRenderCards() {
+    var favs = getFavorites();
     var filtered = cheatsheetData.filter(function(cheatsheet) {
         // check if category matches (or if filter is 'all' or 'favorites')
-        var categoryMatch = false;
-        if (currentFilter === 'all') {
-            categoryMatch = true;
-        } else if (currentFilter === 'favorites') {
-            categoryMatch = FavoritesManager.isFavorite(cheatsheet.title);
+
         } else {
             categoryMatch = cheatsheet.category === currentFilter;
         }
@@ -268,17 +270,13 @@ function createCardElement(cheatsheet) {
     var card = document.createElement('div');
     card.className = 'card';
     
-    var isFavorite = FavoritesManager.isFavorite(cheatsheet.title);
-    
-    // SVG Heart Template
-    var heartIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="' + (isFavorite ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="heart-icon"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>';
+
     
     // build the html for the card
     card.innerHTML = 
         '<div class="card-header">' +
             '<h3 class="card-title">' + cheatsheet.title + '</h3>' +
-            '<div class="header-actions">' +
-                '<button class="fav-btn' + (isFavorite ? ' active' : '') + '" data-title="' + escapeHtml(cheatsheet.title) + '" aria-label="Toggle Favorite">' + heartIcon + '</button>' +
+
                 '<span class="card-category"><span class="dot dot-' + cheatsheet.category + '"></span>' + cheatsheet.category + '</span>' +
             '</div>' +
         '</div>' +
@@ -289,6 +287,19 @@ function createCardElement(cheatsheet) {
     // add click event listener to the copy button
     var copyButton = card.querySelector('.copy-btn');
     copyButton.addEventListener('click', handleCopyClick);
+
+    // add click event listener to the favorite button
+    var favButton = card.querySelector('.favorite-btn');
+    favButton.addEventListener('click', function() {
+        var added = toggleFavorite(cheatsheet.title);
+        favButton.textContent = added ? '♥' : '♡';
+        favButton.classList.toggle('favorited', added);
+        updateCounts();
+        // if currently viewing favorites and unfavorited, re-render
+        if (currentFilter === 'favorites' && !added) {
+            filterAndRenderCards();
+        }
+    });
     
     return card;
 }

@@ -217,6 +217,53 @@ body {
 .dot-sql { background-color: #f97316; }
 .fav-icon { font-size: 1.1rem; line-height: 1; }
 
+/* Favorites filter button */
+.filter-btn--favorites .heart-icon {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.filter-btn--favorites.active {
+    background-color: #e05a7a;
+    border-color: #e05a7a;
+}
+
+.filter-btn--favorites:hover {
+    border-color: #e05a7a;
+    color: #e05a7a;
+}
+
+/* Favorite heart button on card */
+.card-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    margin-left: 10px;
+}
+
+.favorite-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1;
+    color: var(--text-muted);
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: color 0.2s ease, transform 0.15s ease;
+    flex-shrink: 0;
+}
+
+.favorite-btn:hover {
+    color: #e05a7a;
+    transform: scale(1.2);
+}
+
+.favorite-btn.favorited {
+    color: #e05a7a;
+}
+
 /* Count badge */
 .count {
     font-size: 0.8rem;
